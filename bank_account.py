@@ -1,5 +1,5 @@
 class AccountDB:
-    def __int__(self):
+    def __init__(self):
         self.account_database = []
 
     def insert(self, account):
@@ -20,6 +20,11 @@ class AccountDB:
             if account.account_number == account_num:
                 return account
         return None
+
+    def delete(self, account_num):
+        index = self.__search_private(account_num)
+        if index != -1:
+            self.account_database.pop(index)
 
     def __str__(self):
         b = ''
@@ -49,20 +54,21 @@ class Account:
 
 account1 = Account("0000", "saving", "David Patterson", 1000)
 account2 = Account("0001", "checking", "John Hennessy", 2000)
-account3 = Account("0002", "saving", "Mark Hill", 3000)
-account4 = Account("0003", "saving", "David Wood", 4000)
-account5 = Account("0003", "saving", "David Wood", 4000)
+account3 = Account("0003", "saving", "Mark Hill", 3000)
+account4 = Account("0004", "saving", "David Wood", 4000)
+account5 = Account("0004", "saving", "David Wood", 4000)
 my_account_DB = AccountDB()
 my_account_DB.insert(account1)
 my_account_DB.insert(account2)
+my_account_DB.insert(account3)
+my_account_DB.insert(account4)
+my_account_DB.insert(account5)
 print(my_account_DB)
 my_account_DB.search_public("0003").deposit(50)
 print(my_account_DB)
-print(account1, account2, account3, account4, account5)
-print(account3)
-account3.deposit(50)
-print(account3)
-account3.withdraw(100)
-print(account3)
-account3.withdraw(6000)
-print(account3)
+my_account_DB.search_public("0003").withdraw(100)
+print(my_account_DB)
+my_account_DB.delete('0002')
+print(my_account_DB)
+my_account_DB.search_public("0010").deposit(50)
+print(my_account_DB)
