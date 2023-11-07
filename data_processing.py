@@ -100,3 +100,30 @@ my_table2 = my_DB.search('countries')
 my_table3 = my_table1.join(my_table2, 'country')
 my_table3_filtered = my_table3.filter(lambda x: x['EU'] == 'no').filter(lambda x: float(x['temperature']) < 5.0)
 print(my_table3_filtered.table)
+
+print(" ")
+eu_cities_no_coastline = my_table3.filter(lambda x: x['EU'] == 'yes' and x['coastline'] == 'no').table
+min_temp = min(float(city['temperature']) for city in eu_cities_no_coastline)
+max_temp = max(float(city['temperature']) for city in eu_cities_no_coastline)
+print("Min temperature:", min_temp)
+print("Max temperature:", max_temp)
+print(" ")
+
+country_latitudes = {}
+
+for city in my_table1.table:
+    country = city['country']
+    latitude = float(city['latitude'])
+
+    if country not in country_latitudes:
+        country_latitudes[country] = {'min_latitude': latitude, 'max_latitude': latitude}
+    else:
+        if latitude < country_latitudes[country]['min_latitude']:
+            country_latitudes[country]['min_latitude'] = latitude
+        if latitude > country_latitudes[country]['max_latitude']:
+            country_latitudes[country]['max_latitude'] = latitude
+
+for country, latitudes in country_latitudes.items():
+    print(f"Country: {country}")
+    print(f"Min Latitude: {latitudes['min_latitude']}")
+    print(f"Max Latitude: {latitudes['max_latitude']}")
